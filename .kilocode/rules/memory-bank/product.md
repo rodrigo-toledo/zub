@@ -25,3 +25,15 @@ Zub solves this problem by automating the entire process. It is a command-line t
 *   **Accuracy**: Zub should consistently find and download the correct, perfectly synchronized subtitle.
 *   **Speed**: The process should be fast, taking only a few seconds.
 *   **Reliability**: It should work consistently across different platforms (Windows, macOS, Linux) with no external dependencies.
+
+## CLI UX (current)
+
+- Flags:
+  - -l/--lang: specify desired subtitle language; repeatable.
+  - --min-score <u32>: minimum match score threshold.
+  - --dry-run: simulate actions without downloading.
+
+- Example:
+  zub --lang en --min-score 500 --dry-run /videos/Show.S01E01.mkv
+
+- Parser implementation: [cli.parseArgs()](src/cli.zig:21)

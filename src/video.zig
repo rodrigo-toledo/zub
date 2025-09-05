@@ -14,6 +14,7 @@ pub const VideoMetadata = struct {
     release_group: ?[]const u8 = null,
     resolution: ?[]const u8 = null,
     hash: ?[]const u8 = null,
+    video_type: ?VideoType = null,
 };
 
 inline fn isDigit(c: u8) bool {
@@ -110,6 +111,9 @@ pub fn detectVideoType(filename: []const u8) VideoType {
 pub fn parseFilename(allocator: std.mem.Allocator, filename: []const u8) !VideoMetadata {
     _ = allocator; // not needed for these tests; slices reference filename
     var meta: VideoMetadata = .{};
+
+    // Determine video type
+    meta.video_type = detectVideoType(filename);
 
     // Determine series/title from first token
     if (findFirstDot(filename)) |dot| {

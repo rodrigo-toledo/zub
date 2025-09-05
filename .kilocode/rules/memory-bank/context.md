@@ -1,7 +1,28 @@
 # Context: Zub
 
-- **Current Focus**: The project is in the initial setup phase. The memory bank has just been initialized.
-- **Recent Changes**:
-  - The core memory bank files (`brief.md`, `product.md`, `architecture.md`, `tech.md`) have been created based on the project's existing documentation and source code.
-  - The development strategy has been updated in `tech.md` to prioritize Linux for initial development.
-- **Next Steps**: The next step is to begin implementing the core functionality of the `zub` subtitle downloader, following the implementation plan.
+- Current Focus: Phase 4 — Additional Providers via TDD (NapiProjekt, BSPlayer), XML utilities as needed, and end-to-end integration tests.
+
+- Recent Changes:
+  - Phase 3 completed via TDD:
+    - Scoring engine implemented: [score.computeScore()](src/score.zig:23) and [score.selectBestSubtitle()](src/score.zig:107) with provider-agnostic logic, tie-breaks (prefer hash match, then higher aggregate score), and a min-score threshold.
+    - Episode weights: HASH=971, SERIES=486, SEASON=54, EPISODE=54, YEAR=162.
+    - Movie weights: HASH=323, TITLE=162, YEAR=54.
+    - [src/video.zig](src/video.zig) updated to include a video_type discriminator used by scoring.
+  - CLI Argument Parsing:
+    - [cli.parseArgs()](src/cli.zig:21) in [src/cli.zig](src/cli.zig); Config defaults: min_score=0, dry_run=false; supports -l/--lang accumulation, --min-score, --dry-run; collects remaining args as paths; rejects unknown flags; tests in [src/cli.test.zig](src/cli.test.zig).
+  - Core Orchestration:
+    - [core.selectBest()](src/core.zig:7) in [src/core.zig](src/core.zig) delegates to [score.selectBestSubtitle()](src/score.zig:107) with min-score threshold; tests in [src/core.test.zig](src/core.test.zig).
+  - Wiring:
+    - [src/root.zig](src/root.zig) exports cli and core modules; [build.zig](build.zig) includes cli/core/score tests; all tests green via zig build test.
+
+- New/updated files:
+  - [src/score.zig](src/score.zig), [src/score.test.zig](src/score.test.zig)
+  - [src/cli.zig](src/cli.zig), [src/cli.test.zig](src/cli.test.zig)
+  - [src/core.zig](src/core.zig), [src/core.test.zig](src/core.test.zig)
+  - [src/video.zig](src/video.zig) (added video_type)
+  - [src/root.zig](src/root.zig), [build.zig](build.zig)
+
+- Next Steps (TDD-first):
+  - Implement NapiProjekt and BSPlayer providers with failing tests first; add XML utilities if required by provider APIs.
+  - Add integration tests for end-to-end flow.
+  - Consider minimal wiring in [src/main.zig](src/main.zig) to call [cli.parseArgs()](src/cli.zig:21) and core routines.

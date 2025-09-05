@@ -202,6 +202,51 @@ pub fn build(b: *std.Build) void {
     const run_subtitle_tests = b.addRunArtifact(subtitle_tests);
     test_step.dependOn(&run_subtitle_tests.step);
 
+    // Standalone tests for the Score module (src/score.test.zig)
+    const score_test_module = b.createModule(.{
+        .root_source_file = b.path("src/score.test.zig"),
+        .target = target,
+        .optimize = optimize,
+        .imports = &.{
+            .{ .name = "zub", .module = mod },
+        },
+    });
+    const score_tests = b.addTest(.{
+        .root_module = score_test_module,
+    });
+    const run_score_tests = b.addRunArtifact(score_tests);
+    test_step.dependOn(&run_score_tests.step);
+
+    // Standalone tests for the CLI module (src/cli.test.zig)
+    const cli_test_module = b.createModule(.{
+        .root_source_file = b.path("src/cli.test.zig"),
+        .target = target,
+        .optimize = optimize,
+        .imports = &.{
+            .{ .name = "zub", .module = mod },
+        },
+    });
+    const cli_tests = b.addTest(.{
+        .root_module = cli_test_module,
+    });
+    const run_cli_tests = b.addRunArtifact(cli_tests);
+    test_step.dependOn(&run_cli_tests.step);
+
+    // Standalone tests for the Core module (src/core.test.zig)
+    const core_test_module = b.createModule(.{
+        .root_source_file = b.path("src/core.test.zig"),
+        .target = target,
+        .optimize = optimize,
+        .imports = &.{
+            .{ .name = "zub", .module = mod },
+        },
+    });
+    const core_tests = b.addTest(.{
+        .root_module = core_test_module,
+    });
+    const run_core_tests = b.addRunArtifact(core_tests);
+    test_step.dependOn(&run_core_tests.step);
+
     // Just like flags, top level steps are also listed in the `--help` menu.
     //
     // The Zig build system is entirely implemented in userland, which means
