@@ -1,9 +1,9 @@
 const std = @import("std");
 const test_allocator = std.testing.allocator;
 const zub = @import("zub");
-const Subtitle = zub.subtitle.Subtitle;
-const VideoMetadata = zub.video.VideoMetadata;
-const Language = zub.language.Language;
+const Subtitle = zub.Subtitle;
+const VideoMetadata = zub.VideoMetadata;
+const Language = zub.Language;
 
 fn listContains(list: [][]const u8, item: []const u8) bool {
     for (list) |it| {
