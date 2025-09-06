@@ -8,6 +8,7 @@ pub const Config = struct {
     paths: [][]const u8,
     min_score: u32,
     dry_run: bool,
+    help: bool = false,
 
     pub fn deinit(self: *Config, allocator: std.mem.Allocator) void {
         allocator.free(self.languages);
@@ -18,6 +19,31 @@ pub const Config = struct {
 pub const parse = language.parse;
 pub const eql = language.eql;
 
+pub fn helpText() []const u8 {
+    return 
+    \\Zub — Subtitle downloader
+    \\Usage: zub [OPTIONS] [PATH ...]
+    \\PATH accepts files and directories.
+    \\Directories are scanned recursively for supported video files.
+    \\
+    \\Options:
+    \\  -l, --lang <code>       Repeatable. Language code (e.g., en, pt-BR).
+    \\      --min-score <u32>   Minimum match score threshold. Default: 0.
+    \\      --dry-run           Simulate actions without downloading.
+    \\  -h, --help             Show this help and exit.
+    \\
+    \\Behavior:
+    \\  Multiple paths may be provided; each directory is walked recursively.
+    \\  Unknown flags cause an error.
+    \\
+    \\Examples:
+    \\  zub --help
+    \\  zub -l en /Movies
+    \\  zub -l en -l pt-BR --min-score 500 --dry-run /Movies /Shows
+    \\
+    ;
+}
+
 pub fn parseArgs(allocator: std.mem.Allocator, args: []const []const u8) !Config {
     var languages = std.ArrayListUnmanaged(Language){};
     defer languages.deinit(allocator);
@@ -27,12 +53,15 @@ pub fn parseArgs(allocator: std.mem.Allocator, args: []const []const u8) !Config
 
     var min_score: u32 = 0;
     var dry_run: bool = false;
+    var help: bool = false;
 
     var i: usize = 1; // Skip the program name
     while (i < args.len) : (i += 1) {
         const arg = args[i];
 
-        if (std.mem.eql(u8, arg, "-l") or std.mem.eql(u8, arg, "--lang")) {
+        if (std.mem.eql(u8, arg, "-h") or std.mem.eql(u8, arg, "--help")) {
+            help = true;
+        } else if (std.mem.eql(u8, arg, "-l") or std.mem.eql(u8, arg, "--lang")) {
             i += 1;
             if (i >= args.len) {
                 return error.InvalidArgument;
@@ -51,6 +80,8 @@ pub fn parseArgs(allocator: std.mem.Allocator, args: []const []const u8) !Config
             };
         } else if (std.mem.eql(u8, arg, "--dry-run")) {
             dry_run = true;
+        } else if (std.mem.eql(u8, arg, "-h") or std.mem.eql(u8, arg, "--help")) {
+            help = true;
         } else if (arg.len > 0 and arg[0] == '-') {
             // Unknown flag
             return error.InvalidArgument;
@@ -65,5 +96,6 @@ pub fn parseArgs(allocator: std.mem.Allocator, args: []const []const u8) !Config
         .paths = try paths.toOwnedSlice(allocator),
         .min_score = min_score,
         .dry_run = dry_run,
+        .help = help,
     };
 }

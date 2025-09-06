@@ -19,6 +19,12 @@ pub fn main() !void {
     };
     defer config.deinit(allocator);
 
+    // Check if help was requested
+    if (config.help) {
+        std.debug.print("{s}", .{zub.cli.helpText()});
+        return;
+    }
+
     // Process each file path
     for (config.paths) |file_path| {
         try processFile(allocator, config, file_path);
