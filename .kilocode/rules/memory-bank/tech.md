@@ -34,6 +34,10 @@
     - [src/score.test.zig](src/score.test.zig)
     - [src/cli.test.zig](src/cli.test.zig)
     - [src/core.test.zig](src/core.test.zig)
+    - [src/providers/napiprojekt.test.zig](src/providers/napiprojekt.test.zig)
+    - [src/providers/bsplayer.test.zig](src/providers/bsplayer.test.zig)
+    - [src/comprehensive.test.zig](src/comprehensive.test.zig)
+    - [src/integration.test.zig](src/integration.test.zig)
 - Running the full test suite:
   - Use: zig build test
   - Aggregated test executables and steps are wired in [build.zig](build.zig)
@@ -73,8 +77,11 @@
 
 ## Provider System
 - Interface defined in [src/providers/provider.zig](src/providers/provider.zig)
-- Implemented provider (placeholder tests): [src/providers/podnapisi.zig](src/providers/podnapisi.zig) with [src/providers/podnapisi.test.zig](src/providers/podnapisi.test.zig)
-- Planned providers: NapiProjekt, BSPlayer (to be added via TDD)
+- Implemented providers:
+  - Podnapisi provider (placeholder tests): [src/providers/podnapisi.zig](src/providers/podnapisi.zig) with [src/providers/podnapisi.test.zig](src/providers/podnapisi.test.zig)
+  - NapiProjekt provider (fully implemented): [src/providers/napiprojekt.zig](src/providers/napiprojekt.zig) with [src/providers/napiprojekt.test.zig](src/providers/napiprojekt.test.zig)
+  - BSPlayer provider (fully implemented): [src/providers/bsplayer.zig](src/providers/bsplayer.zig) with [src/providers/bsplayer.test.zig](src/providers/bsplayer.test.zig)
+  - Mock provider (for testing): [src/providers/mock.zig](src/providers/mock.zig)
 
 ## Targets and Constraints
 - Cross-platform goal: Windows, macOS, Linux

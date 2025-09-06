@@ -247,6 +247,69 @@ pub fn build(b: *std.Build) void {
     const run_core_tests = b.addRunArtifact(core_tests);
     test_step.dependOn(&run_core_tests.step);
 
+    // Standalone tests for the NapiProjekt provider (src/providers/napiprojekt.test.zig)
+    const napiprojekt_test_module = b.createModule(.{
+        .root_source_file = b.path("src/providers/napiprojekt.test.zig"),
+        .target = target,
+        .optimize = optimize,
+        .imports = &.{
+            .{ .name = "zub", .module = mod },
+        },
+    });
+    const napiprojekt_tests = b.addTest(.{
+        .root_module = napiprojekt_test_module,
+    });
+    const run_napiprojekt_tests = b.addRunArtifact(napiprojekt_tests);
+    // Standalone tests for the BSPlayer provider (src/providers/bsplayer.test.zig)
+    const bsplayer_test_module = b.createModule(.{
+        .root_source_file = b.path("src/providers/bsplayer.test.zig"),
+        .target = target,
+        .optimize = optimize,
+        .imports = &.{
+            .{ .name = "zub", .module = mod },
+            .{ .name = "xml", .module = b.dependency("xml", .{
+                .target = target,
+                .optimize = optimize,
+            }).module("xml") },
+        },
+    });
+    const bsplayer_tests = b.addTest(.{
+        .root_module = bsplayer_test_module,
+    });
+    const run_bsplayer_tests = b.addRunArtifact(bsplayer_tests);
+    test_step.dependOn(&run_bsplayer_tests.step);
+    test_step.dependOn(&run_napiprojekt_tests.step);
+
+    // Standalone tests for the Comprehensive module (src/comprehensive.test.zig)
+    const comprehensive_test_module = b.createModule(.{
+        .root_source_file = b.path("src/comprehensive.test.zig"),
+        .target = target,
+        .optimize = optimize,
+        .imports = &.{
+            .{ .name = "zub", .module = mod },
+        },
+    });
+    const comprehensive_tests = b.addTest(.{
+        .root_module = comprehensive_test_module,
+    });
+    const run_comprehensive_tests = b.addRunArtifact(comprehensive_tests);
+    test_step.dependOn(&run_comprehensive_tests.step);
+
+    // Standalone tests for the Integration module (src/integration.test.zig)
+    const integration_test_module = b.createModule(.{
+        .root_source_file = b.path("src/integration.test.zig"),
+        .target = target,
+        .optimize = optimize,
+        .imports = &.{
+            .{ .name = "zub", .module = mod },
+        },
+    });
+    const integration_tests = b.addTest(.{
+        .root_module = integration_test_module,
+    });
+    const run_integration_tests = b.addRunArtifact(integration_tests);
+    test_step.dependOn(&run_integration_tests.step);
+
     // Just like flags, top level steps are also listed in the `--help` menu.
     //
     // The Zig build system is entirely implemented in userland, which means

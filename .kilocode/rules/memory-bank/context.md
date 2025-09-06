@@ -1,6 +1,6 @@
 # Context: Zub
 
-- Current Focus: Phase 4 — Additional Providers via TDD (NapiProjekt, BSPlayer), XML utilities as needed, and end-to-end integration tests.
+- Current Focus: Project Completion - All core functionality implemented and tested
 
 - Recent Changes:
   - Phase 3 completed via TDD:
@@ -14,6 +14,13 @@
     - [core.selectBest()](src/core.zig:7) in [src/core.zig](src/core.zig) delegates to [score.selectBestSubtitle()](src/score.zig:107) with min-score threshold; tests in [src/core.test.zig](src/core.test.zig).
   - Wiring:
     - [src/root.zig](src/root.zig) exports cli and core modules; [build.zig](build.zig) includes cli/core/score tests; all tests green via zig build test.
+  - Phase 4 completed:
+    - Implemented NapiProjekt provider [src/providers/napiprojekt.zig](src/providers/napiprojekt.zig) with full search and download functionality
+    - Implemented BSPlayer provider [src/providers/bsplayer.zig](src/providers/bsplayer.zig) with SOAP-based API integration
+    - Added comprehensive testing with [src/comprehensive.test.zig](src/comprehensive.test.zig) covering multi-provider scenarios
+    - Added integration testing with [src/integration.test.zig](src/integration.test.zig) covering end-to-end workflows
+    - Completed main.zig implementation with full CLI workflow integration
+    - Updated build.zig to include new providers and test suites
 
 - New/updated files:
   - [src/score.zig](src/score.zig), [src/score.test.zig](src/score.test.zig)
@@ -21,8 +28,13 @@
   - [src/core.zig](src/core.zig), [src/core.test.zig](src/core.test.zig)
   - [src/video.zig](src/video.zig) (added video_type)
   - [src/root.zig](src/root.zig), [build.zig](build.zig)
+  - [src/providers/napiprojekt.zig](src/providers/napiprojekt.zig), [src/providers/napiprojekt.test.zig](src/providers/napiprojekt.test.zig)
+  - [src/providers/bsplayer.zig](src/providers/bsplayer.zig), [src/providers/bsplayer.test.zig](src/providers/bsplayer.test.zig)
+  - [src/comprehensive.test.zig](src/comprehensive.test.zig)
+  - [src/integration.test.zig](src/integration.test.zig)
+  - [src/main.zig](src/main.zig) (fully implemented)
 
-- Next Steps (TDD-first):
-  - Implement NapiProjekt and BSPlayer providers with failing tests first; add XML utilities if required by provider APIs.
-  - Add integration tests for end-to-end flow.
-  - Consider minimal wiring in [src/main.zig](src/main.zig) to call [cli.parseArgs()](src/cli.zig:21) and core routines.
+- Next Steps:
+  - Project is fully implemented and ready for use
+  - All core functionality is complete with comprehensive test coverage
+  - Ready for distribution as a single-binary cross-platform command-line tool
